@@ -1277,7 +1277,7 @@ static int cmd_release_create(const char *tag, const char *title, const char *co
             const char *s1 = strrchr(content_path, '\\');
             const char *s2 = strrchr(content_path, '/');
             const char *base = (s1 && s2) ? ((s1 > s2) ? s1 + 1 : s2 + 1) : (s1 ? s1 + 1 : (s2 ? s2 + 1 : content_path));
-            if (!copy_string(asset_name, sizeof(asset_name), base)) { free(data); fgh_error("release asset filename is too long"); return 0; }
+            if (!copy_string(asset_name, sizeof(asset_name), base)) { free(r); fgh_error("release asset filename is too long"); return 0; }
             if (!read_file(content_path, &file, &flen)) { free(r); return 0; }
             if (!url_encode(asset_name, encoded_name, sizeof(encoded_name))) { free(file); free(r); return 0; }
             _snprintf_s(upload_path, sizeof(upload_path), _TRUNCATE,
