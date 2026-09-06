@@ -8,40 +8,31 @@ jobs:
   build:
     name: Windows x64
     runs-on: windows-latest
-
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v5
 
       - name: Setup MSYS2 UCRT64
         uses: msys2/setup-msys2@v2
         with:
           msystem: UCRT64
           update: true
-          install: >-
-            mingw-w64-ucrt-x86_64-gcc
+          install: mingw-w64-ucrt-x86_64-gcc
 
       - name: Check GCC
         shell: msys2 {0}
-        run: |
-          gcc --version
-          which gcc
+        run: gcc --version
 
       - name: Build
         shell: msys2 {0}
         run: |
-          gcc -O2 -std=c11 -Wall -Wextra \
-            -D_CRT_SECURE_NO_WARNINGS \
-            -o fgh.exe fgh.c \
-            -lwinhttp -lcrypt32 -lshell32
+          gcc -O2 -std=c11 -Wall -Wextra -o fgh.exe fgh.c -lwinhttp -lcrypt32 -lshell32
 
       - name: Verify
         shell: msys2 {0}
-        run: |
-          file fgh.exe
-          ./fgh.exe --version
+        run: ./fgh.exe --version
 
-      - name: Upload fgh.exe
+      - name: Upload
         uses: actions/upload-artifact@v4
         with:
           name: Fgithub-CLI-Windows-x64
