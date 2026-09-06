@@ -1,0 +1,32 @@
+name: Build Fgithub CLI
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install MinGW
+        run: choco install mingw -y
+
+      - name: Build
+        shell: cmd
+        run: |
+          gcc -O2 -std=c11 fgh.c -o fgh.exe -lwinhttp -lcrypt32 -lshell32
+
+      - name: Verify
+        shell: cmd
+        run: |
+          fgh.exe --version
+
+      - name: Upload fgh.exe
+        uses: actions/upload-artifact@v4
+        with:
+          name: Fgithub-CLI-Windows-x64
+          path: fgh.exe
