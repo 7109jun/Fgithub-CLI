@@ -13,19 +13,26 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install MinGW
-        run: choco install mingw -y
+        shell: powershell
+        run: |
+          choco install mingw -y --no-progress
+          refreshenv
+          gcc --version
 
       - name: Build
-        shell: cmd
+        shell: powershell
         run: |
-          gcc -O2 -std=c11 fgh.c -o fgh.exe -lwinhttp -lcrypt32 -lshell32
+          gcc -O2 -std=c11 .\fgh.c -o .\fgh.exe -lwinhttp -lcrypt32 -lshell32
+          if ($LASTEXITCODE -ne 0) {
+            exit $LASTEXITCODE
+          }
 
       - name: Verify
-        shell: cmd
+        shell: powershell
         run: |
-          fgh.exe --version
+          .\fgh.exe --version
 
-      - name: Upload fgh.exe
+      - name: Upload
         uses: actions/upload-artifact@v4
         with:
           name: Fgithub-CLI-Windows-x64
