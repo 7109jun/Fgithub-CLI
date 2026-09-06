@@ -1896,6 +1896,16 @@ int main(int argc, char **argv) {
     SetConsoleOutputCP(CP_UTF8);
     SetConsoleCP(CP_UTF8);
     load_config();
+    if (argc >= 2) {
+        if (str_ieq(argv[1], "--version") || str_ieq(argv[1], "-v")) {
+            printf("Fgithub CLI %s\n", FGH_VERSION);
+            return 0;
+        }
+        if (str_ieq(argv[1], "--help") || str_ieq(argv[1], "-h")) {
+            usage();
+            return 0;
+        }
+    }
     if (argc == 1) {
         repl();
         return 0;
